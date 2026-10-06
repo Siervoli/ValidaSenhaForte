@@ -1,18 +1,57 @@
-## Getting Started
+import java.util.Scanner;
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+public class ValidaSenhaForte {
 
-## Folder Structure
+private static final String[] senhasObvias = {"12345678", "senha123", "admin123"};
 
-The workspace contains two folders by default, where:
+public static void main(String[] args) {
+Scanner teclado = new Scanner(System.in);
+String mensagem;
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+do {
+System.out.print("Digite uma senha ficticia: ");
+String senha = teclado.nextLine();
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+mensagem = avaliarSenha(senha);
+System.out.println(mensagem);
+} while (!mensagem.startsWith("SUCESSO"));
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+teclado.close();
+}
 
-## Dependency Management
+public static String avaliarSenha(String senha) {
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+if (senha.length() < 8) {
+return "DICA: A senha deve ter no mínimo 8 caracteres.";
+}
+
+boolean temNumero = false;
+for (int i = 0; i < senha.length(); i++) {
+if (Character.isDigit(senha.charAt(i))) {
+temNumero = true;
+break;
+}
+}
+if (!temNumero) {
+return "DICA: Adicione pelo menos um número à sua senha.";
+}
+
+for (int i = 0; i < senhasObvias.length; i++) {
+if (senha.equals(senhasObvias[i])) {
+return "ALERTA: Esta senha é muito comum ou óbvia.";
+}
+}
+
+boolean temMaiuscula = false;
+for (int i = 0; i < senha.length(); i++) {
+if (Character.isUpperCase(senha.charAt(i))) {
+temMaiuscula = true;
+break;
+}
+}
+if (!temMaiuscula) {
+return "DICA: Adicione pelo menos uma letra maiúscula à sua senha.";
+}
+return "SUCESSO: Sua senha passou nos critérios básicos!";
+}
+}
